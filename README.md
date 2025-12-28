@@ -1,2 +1,2 @@
 # Spaceship-Titanic-Dataset-with-TensorFlow-Decision-Forests
-Notebook ini memandu Anda dalam melatih model Random Forest dasar menggunakan TensorFlow Decision Forests pada dataset Spaceship Titanic yang disediakan untuk kompetisi ini. Decision Forests adalah keluarga model berbasis pohon (tree-based models) yang mencakup Random Forest dan Gradient Boosted Trees.
+This notebook provides a concise implementation of a baseline Random Forest model using TensorFlow Decision Forests on the Spaceship Titanic dataset for this competition. Decision Forests are a class of tree-based models, including Random Forests and Gradient Boosted Trees.
