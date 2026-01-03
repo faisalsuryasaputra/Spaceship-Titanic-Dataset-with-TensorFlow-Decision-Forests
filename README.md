@@ -1,91 +1,84 @@
 # 🚀 Spaceship Titanic: TensorFlow Decision Forests
 
-![Python](https://img.shields.io/badge/Python-3.8%2B-blue)
-![TensorFlow](https://img.shields.io/badge/TensorFlow-2.11%2B-orange)
+![Python](https://img.shields.io/badge/Python-3.8%2B-blue?logo=python&logoColor=white)
+![TensorFlow](https://img.shields.io/badge/TensorFlow-2.11%2B-orange?logo=tensorflow&logoColor=white)
 ![TF-DF](https://img.shields.io/badge/TF--DF-Random%20Forest-green)
 ![Status](https://img.shields.io/badge/Status-Completed-success)
 
-> **Sebuah solusi baseline yang kuat menggunakan TensorFlow Decision Forests (TF-DF) untuk kompetisi Kaggle Spaceship Titanic.**
+> **A robust baseline solution using TensorFlow Decision Forests (TF-DF) for the Kaggle Spaceship Titanic competition.**
 
-## 📌 Gambaran Umum (Overview)
+## 📌 Overview
 
-Proyek ini bertujuan untuk memprediksi apakah seorang penumpang di Spaceship Titanic ikut terangkut ke dimensi lain atau tidak. Kami menggunakan **TensorFlow Decision Forests (TF-DF)**, sebuah library yang memungkinkan pelatihan model berbasis *tree* (seperti Random Forest) dengan API Keras yang mudah digunakan.
+This project aims to predict whether a passenger on the Spaceship Titanic was transported to an alternate dimension. We utilize **TensorFlow Decision Forests (TF-DF)**, a library that enables the training of tree-based models (such as Random Forest) using the familiar and easy-to-use Keras API.
 
-Pendekatan ini sangat efektif untuk data tabular karena membutuhkan pra-pemrosesan (preprocessing) yang minimal dibandingkan dengan jaringan saraf tiruan (neural networks) klasik.
+This approach is highly effective for tabular data as it requires minimal preprocessing compared to classical Neural Networks.
 
 ## 📊 Dataset
 
-Dataset berasal dari kompetisi Kaggle: [Spaceship Titanic](https://www.kaggle.com/c/spaceship-titanic).
-* **Total Data Latih:** 8,693 entri dengan 14 fitur.
-* **Target:** `Transported` (Boolean) - Apakah penumpang selamat/terangkut.
-* **Fitur Utama:** `HomePlanet`, `CryoSleep`, `Cabin`, `Destination`, `Age`, `VIP`, dan pengeluaran fasilitas mewah (`RoomService`, `FoodCourt`, dll).
+The dataset is sourced from the Kaggle competition: [Spaceship Titanic](https://www.kaggle.com/c/spaceship-titanic).
 
+* **Total Training Data:** 8,693 entries with 14 features.
+* **Target:** `Transported` (Boolean) - Whether the passenger was transported.
+* **Key Features:** `HomePlanet`, `CryoSleep`, `Cabin`, `Destination`, `Age`, `VIP`, and luxury amenities expenditure (`RoomService`, `FoodCourt`, etc.).
 
+## 🛠️ Methodology & Workflow
 
-## 🛠️ Metodologi & Alur Kerja
+The code in this repository covers the following *end-to-end* steps:
 
-Kode dalam repositori ini mencakup langkah-langkah *end-to-end* berikut:
+### 1. Exploratory Data Analysis (EDA)
+We analyzed the distribution of both numerical and categorical data to understand passenger characteristics and identify patterns.
 
-### 1. Eksplorasi Data (EDA)
-Kami melakukan analisis distribusi data numerik dan kategorikal untuk memahami karakteristik penumpang.
-
-
-### 2. Pra-pemrosesan Data (Preprocessing)
-TF-DF menangani banyak tipe data secara *native*, namun beberapa penyesuaian tetap dilakukan:
-* **Handling Missing Values:** Mengisi nilai null pada kolom numerik dan boolean dengan `0`.
-* **Boolean Conversion:** TF-DF saat ini belum mendukung tipe data boolean secara langsung, sehingga kolom seperti `Transported`, `VIP`, dan `CryoSleep` dikonversi menjadi `integer` (0 atau 1).
-* **Dropping Columns:** Menghapus kolom `PassengerId` dan `Name` yang tidak relevan untuk pelatihan.
+### 2. Data Preprocessing
+While TF-DF handles many data types natively, some adjustments were necessary:
+* **Handling Missing Values:** Null values in numerical and boolean columns were imputed with `0`.
+* **Boolean Conversion:** Since TF-DF does not currently support boolean data types directly, columns like `Transported`, `VIP`, and `CryoSleep` were converted to `integer` (0 or 1).
+* **Dropping Columns:** Removed `PassengerId` and `Name` as they are irrelevant for training.
 
 ### 3. Feature Engineering
-Fitur `Cabin` yang berisi format string `Deck/Num/Side` dipecah menjadi 3 fitur baru yang lebih informatif:
+The `Cabin` feature, which contains data in the format `Deck/Num/Side`, was split into three more informative features:
 * `Deck`
 * `Cabin_num`
 * `Side`
 
-### 4. Pemodelan (Modeling)
-Kami menggunakan algoritma **Random Forest** standar dari TF-DF.
+### 4. Modeling
+We utilized the standard **Random Forest** algorithm from TF-DF.
 * **Model:** `tfdf.keras.RandomForestModel()`
-* **Split Data:** 80% Training, 20% Validation.
-* **Format Data:** Konversi dari Pandas DataFrame ke `tf.data.Dataset` untuk kinerja optimal.
+* **Data Split:** 80% Training, 20% Validation.
+* **Data Format:** Converted Pandas DataFrame to `tf.data.Dataset` for optimal performance.
 
+## 📈 Evaluation & Performance
 
+The model was evaluated using accuracy metrics on the validation set and *Out-of-Bag* (OOB) data.
 
-## 📈 Hasil Evaluasi & Performa
-
-Model dievaluasi menggunakan metrik akurasi pada data validasi dan *Out-of-Bag* (OOB) data.
-
-* **Waktu Pelatihan:** ~54 detik.
+* **Training Time:** ~54 seconds.
 * **OOB Accuracy:** ~79.73%
 * **Validation Accuracy:** **80.25%**
 
-Grafik di bawah ini menunjukkan peningkatan akurasi OOB seiring bertambahnya jumlah pohon (trees) dalam model:
-
-
-### Feature Importance (Kepentingan Fitur)
-Berdasarkan metrik `NUM_AS_ROOT` (seberapa sering fitur menjadi akar pohon), fitur yang paling berpengaruh adalah:
-1.  **CryoSleep** (Sangat dominan)
+### Feature Importance
+Based on the `NUM_AS_ROOT` metric (how often a feature appears as the root of a tree), the most influential features are:
+1.  **CryoSleep** (Highly dominant)
 2.  **RoomService**
 3.  **Spa**
 4.  **VRDeck**
 
-## 💻 Cara Menjalankan
+## 💻 How to Run
 
-1.  **Instalasi Dependencies:**
+1.  **Install Dependencies:**
     ```bash
     pip install tensorflow tensorflow_decision_forests pandas numpy seaborn matplotlib
     ```
 
-2.  **Jalankan Notebook:**
-    Buka file notebook (misalnya `spaceship_titanic_tfdf.ipynb`) di Jupyter Notebook, Google Colab, atau Kaggle Kernel.
+2.  **Run the Notebook:**
+    Open the notebook file (e.g., `spaceship_titanic_tfdf.ipynb`) in Jupyter Notebook, Google Colab, or a Kaggle Kernel.
 
 3.  **Output:**
-    Script akan menghasilkan file `submission.csv` yang siap diunggah ke Kaggle.
+    The script will generate a `submission.csv` file ready for upload to Kaggle.
 
-## 🤝 Kontribusi
-Repositori ini dirancang sebagai *baseline* pembelajaran. Silakan lakukan *fork* dan eksperimen dengan:
-* Menggunakan `GradientBoostedTreesModel` alih-alih Random Forest.
-* Melakukan hyperparameter tuning yang lebih mendalam.
-* Teknik *imputation* data hilang yang lebih canggih.
+## 🤝 Contribution
+This repository is designed as a learning *baseline*. Feel free to fork and experiment with:
+* Using `GradientBoostedTreesModel` instead of Random Forest.
+* Conducting deeper hyperparameter tuning.
+* Implementing more advanced missing data imputation techniques.
 
 ---
-*Dibuat berdasarkan implementasi TensorFlow Decision Forests v1.2.0*
+*Created based on TensorFlow Decision Forests v1.2.0 implementation.*
